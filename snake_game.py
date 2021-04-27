@@ -7,8 +7,8 @@ colours = {
     'black': (0,0,0),
     'white': (255,255,255),
     'red': (200,0,0),
-    'green_big': (0,250,0),
-    'green_small': (0,200,0)
+    'green_big': (0,200,0),
+    'green_small': (0,250,0)
 }
 
 settings = {
@@ -53,7 +53,7 @@ class SnakeGame:
     def _update(self):
         self.display.fill(colours['black'])
 
-        block_border_size = 2
+        block_border_size = 3
 
         for p in self.snake:
             pygame.draw.rect(self.display, 
