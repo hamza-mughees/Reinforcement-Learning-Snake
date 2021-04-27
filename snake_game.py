@@ -50,17 +50,20 @@ class SnakeGame:
         self._place_food()
         self._update()
     
+    # render display updates
     def _update(self):
         self.display.fill(colours['black'])
 
         block_border_size = 3
 
         for p in self.snake:
+            # display and colour snake outer body
             pygame.draw.rect(self.display, 
                             colours['green_big'],
                             pygame.Rect(p.x, p.y, 
                                     settings['block_size'], 
                                     settings['block_size']))
+            # display and colour snake inner body
             pygame.draw.rect(self.display, 
                             colours['green_small'],
                             pygame.Rect(p.x + block_border_size, 
@@ -68,16 +71,19 @@ class SnakeGame:
                                         settings['block_size'] - 2*block_border_size, 
                                         settings['block_size'] - 2*block_border_size))
         
+        # display and colour food
         pygame.draw.rect(self.display,
                         colours['red'],
                         pygame.Rect(self.food.x, self.food.y,
                                     settings['block_size'], 
                                     settings['block_size']))
         
+        # display scoring text
         text = font.render(f'Score: {str(self.score)}', True, colours['white'])
         self.display.blit(text, [0,0])
         pygame.display.flip()
     
+    # random food positioning
     def _place_food(self):
         x_max_scaled = (self.width - settings['block_size']) // settings['block_size']
         y_max_scaled = (self.height - settings['block_size']) // settings['block_size']
