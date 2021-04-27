@@ -90,8 +90,87 @@ class SnakeGame:
         x = random.randint(0, x_max_scaled) * settings['block_size']
         y = random.randint(0, y_max_scaled) * settings['block_size']
         self.food = Point(x, y)
+        # if food is on snake, replace it
         if self.food in self.snake:
             self._place_food()
+    
+    def take_step(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            # if key pressed, check directions
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    self.direction = Direction.LEFT
+                if event.key == pygame.K_RIGHT:
+                    self.direction = Direction.RIGHT
+                if event.key == pygame.K_UP:
+                    self.direction = Direction.UP
+                if event.key == pygame.K_DOWN:
+                    self.direction = Direction.DOWN
+        
+        # update head (take the move to self.direction)
+        self._move()
+        self.snake.insert(0, self.head)
+
+        if self._collided():
+            # return game over and score
+            return True, self.score
+        
+        # if snake eats food
+        if self.head == self.food:
+            self.score += 1
+            self._place_food()
+        else:
+            self.snake.pop()
+        
+        self.clock.tick(settings['speed'])
+        self._update()
+
+        # return game not over and score
+        return False, self.score
+    
+    def _move(self):
+        x, y = self._get_head()
+
+        if self.direction == Direction.RIGHT:
+            x += settings['block_size']
+        if self.direction == Direction.LEFT:
+            x -= settings['block_size']
+        if self.direction == Direction.UP:
+            y -= settings['block_size']
+        if self.direction == Direction.DOWN:
+            y += settings['block_size']
+        
+        self.head = Point(x, y)
+
+    def _get_head(self):
+        return self.head.x, self.head.y
+
+    def _collided(self):
+        # check snake hits its own body
+        if self.head in self.snake[1:]:
+            return True
+
+        x, y = self._get_head()
+        w, h = self.width, self.height
+        bs = settings['block_size']
+
+        # check snake hits a wall
+        if x + bs > w or x < 0 or y + bs > h or y < 0:
+            return True
+
+def game_loop():
+    snake_game = SnakeGame()
+
+    while True:
+        is_game_over, score = snake_game.take_step()
+
+        if is_game_over:
+            break
+    
+    print(f'Final Score: {score}')
 
 if __name__ == '__main__':
-    game = SnakeGame()
+    game_loop()
