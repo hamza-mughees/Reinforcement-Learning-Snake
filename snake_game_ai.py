@@ -113,7 +113,7 @@ class SnakeGameAI:
 
         reward = 0
 
-        if self._collided() or self.frame_iter > 100*len(self.snake):
+        if self.collided() or self.frame_iter > 100*len(self.snake):
             # return game over, -10 reward, and score
             reward = -10
             return True, reward, self.score
@@ -144,6 +144,7 @@ class SnakeGameAI:
             idx = (idx + 1) % 4     # cycle back from up to right
             self.direction = l[idx]
         else:       # action = [0,0,1]
+            # turn left
             idx = (idx - 1) % 4     # cycle back from right to up
             self.direction = l[idx]
 
@@ -167,7 +168,7 @@ class SnakeGameAI:
     def _get_head(self):
         return self.head.x, self.head.y
 
-    def _collided(self, pt=None):
+    def collided(self, pt=None):
         if pt is None:
             pt = self.head
         # check snake hits its own body
