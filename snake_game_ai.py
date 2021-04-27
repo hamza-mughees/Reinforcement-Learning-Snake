@@ -114,9 +114,9 @@ class SnakeGameAI:
         reward = 0
 
         if self.collided() or self.frame_iter > 100*len(self.snake):
-            # return game over, -10 reward, and score
+            # return -10 reward, game over, and score
             reward = -10
-            return True, reward, self.score
+            return reward, True, self.score
         
         # if snake eats food
         if self.head == self.food:
@@ -129,8 +129,8 @@ class SnakeGameAI:
         self.clock.tick(settings['speed'])
         self._update()
 
-        # return game not over, reward, and score
-        return False, reward, self.score
+        # return reward, game not over, and score
+        return reward, False, self.score
     
     def _move(self, action):
         # [straight, right, left]
