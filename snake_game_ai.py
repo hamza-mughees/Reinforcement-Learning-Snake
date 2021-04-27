@@ -2,22 +2,7 @@ import pygame
 import random
 import numpy as np
 from enum import Enum
-from collections import namedtuple
-
-colours = {
-    'black': (0,0,0),
-    'white': (255,255,255),
-    'red': (200,0,0),
-    'green_big': (0,200,0),
-    'green_small': (0,250,0)
-}
-
-settings = {
-    'block_size': 20,
-    'speed': 20,
-}
-
-Point = namedtuple('Point', ['x', 'y'])
+from config import *
 
 pygame.init()
 font = pygame.font.Font('arial.ttf', 25)
@@ -113,7 +98,7 @@ class SnakeGameAI:
 
         reward = 0
 
-        if self.collided() or self.frame_iter > 100*len(self.snake):
+        if self.is_collision() or self.frame_iter > 100*len(self.snake):
             # return -10 reward, game over, and score
             reward = -10
             return reward, True, self.score
@@ -168,7 +153,7 @@ class SnakeGameAI:
     def _get_head(self):
         return self.head.x, self.head.y
 
-    def collided(self, pt=None):
+    def is_collision(self, pt=None):
         if pt is None:
             pt = self.head
         # check snake hits its own body
