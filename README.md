@@ -1,6 +1,8 @@
 # Reinforcement Learning Snake
 
-In this project, I built a simple snake game which the user can play. I then used Q-Learning to train an AI to play the game.
+![banner](.github/images/banner.gif)
+
+In this project, I used Q-Learning to train an AI to play the snake game.
 
 ## Prerequisites
 
@@ -38,11 +40,7 @@ git clone https://github.com/hamza-mughees/Reinforcement-Learning-Snake.git
 ```
 cd Reinforcement-Learning-Snake
 ```
-3. To play the snake game yourself, run `snake_game.py`:
-```
-python snake_game.py
-```
-4. To train the AI to play the snake game, run `agent.py`:
+3. To train the AI to play the snake game, run `agent.py`:
 ```
 python agent.py
 ```
