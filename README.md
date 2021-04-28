@@ -4,8 +4,6 @@
 
 ### Prerequisites
 
-You will need to have installed:
-
 #### Python
 
 #### NumPy
@@ -23,7 +21,7 @@ Please navigate to [pytorch.org](https://pytorch.org/) to install the correct ve
 - Language: Python
 - Computer Platform: CPU
 
-If the above match your preferences, you may use the following command to install PyTorch:
+If the above match your preferences, you can use the following command to install PyTorch:
 ```
 pip3 install torch==1.8.1+cpu torchvision==0.9.1+cpu torchaudio===0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
 ```
