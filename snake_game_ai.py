@@ -18,7 +18,7 @@ class SnakeGameAI:
         self.width = width
         self.height = height
 
-        self.display = pygame.display.set_mode(
+        self.window = pygame.display.set_mode(
                         (self.width, self.height))
         pygame.display.set_caption('Snake Game')
         self.clock = pygame.time.Clock()
@@ -27,8 +27,10 @@ class SnakeGameAI:
     
     # initial game state
     def reset(self):
+        # set initial direction to right
         self.direction = Direction.RIGHT
 
+        # place snake head in the middle
         self.head = Point(self.width/2, self.height/2)
         self.snake = [self.head,
                       Point(self.head.x - settings['block_size'], self.head.y),
@@ -42,37 +44,46 @@ class SnakeGameAI:
     
     # render display updates
     def _update(self):
-        self.display.fill(colours['black'])
+        self.window.fill(colours['black'])
 
         block_border_size = 3
 
         for pt in self.snake:
-            # display and colour snake outer body
-            pygame.draw.rect(self.display, 
+            self._render_snake_outer_body(pt)
+            self._render_snake_inner_body(pt, block_border_size)
+        
+        self._render_food()
+        
+        # display scoring text
+        text = font.render(f'Score: {str(self.score)}', True, colours['white'])
+        self.window.blit(text, [0,0])
+        pygame.display.flip()
+    
+    # display and colour snake outer body
+    def _render_snake_outer_body(self, pt):
+        pygame.draw.rect(self.window, 
                             colours['green_big'],
                             pygame.Rect(pt.x, pt.y, 
                                     settings['block_size'], 
                                     settings['block_size']))
-            # display and colour snake inner body
-            pygame.draw.rect(self.display, 
+    
+    # display and colour snake inner body
+    def _render_snake_inner_body(self, pt, block_border_size):
+        pygame.draw.rect(self.window, 
                             colours['green_small'],
                             pygame.Rect(pt.x + block_border_size, 
                                         pt.y + block_border_size, 
                                         settings['block_size'] - 2*block_border_size, 
                                         settings['block_size'] - 2*block_border_size))
-        
-        # display and colour food
-        pygame.draw.rect(self.display,
+    
+    # display and colour food
+    def _render_food(self):
+        pygame.draw.rect(self.window,
                         colours['red'],
                         pygame.Rect(self.food.x, self.food.y,
                                     settings['block_size'], 
                                     settings['block_size']))
-        
-        # display scoring text
-        text = font.render(f'Score: {str(self.score)}', True, colours['white'])
-        self.display.blit(text, [0,0])
-        pygame.display.flip()
-    
+
     # random food positioning
     def _place_food(self):
         x_max_scaled = (self.width - settings['block_size']) // settings['block_size']
@@ -104,10 +115,9 @@ class SnakeGameAI:
             return reward, True, self.score
         
         # if snake eats food
-        if self.head == self.food:
-            self.score += 1
+        if self._check_eat_food():
             reward = 10
-            self._place_food()
+            self._when_eat_food()
         else:
             self.snake.pop()
         
@@ -116,6 +126,15 @@ class SnakeGameAI:
 
         # return reward, game not over, and score
         return reward, False, self.score
+    
+    def _check_eat_food(self):
+        if self.head == self.food:
+            return True
+        return False
+    
+    def _when_eat_food(self):
+        self.score += 1
+        self._place_food()
     
     def _move(self, action):
         # [straight, right, left]
@@ -136,12 +155,16 @@ class SnakeGameAI:
         x, y = self._get_head()
 
         if self.direction == Direction.RIGHT:
+            # go right
             x += settings['block_size']
         if self.direction == Direction.LEFT:
+            # go left
             x -= settings['block_size']
         if self.direction == Direction.UP:
+            # go up
             y -= settings['block_size']
         if self.direction == Direction.DOWN:
+            # go down
             y += settings['block_size']
         
         self.head = Point(x, y)

@@ -74,18 +74,18 @@ class Agent:
 
     def train_long_memory(self):
         if len(self.memory) < BATCH_SIZE:
-            mini_sample = self.memory
+            sample = self.memory
         else:
-            mini_sample = random.sample(self.memory, BATCH_SIZE)
+            sample = random.sample(self.memory, BATCH_SIZE)
         
-        states, actions, rewards, next_states, is_game_over_statues = zip(*mini_sample)
-        self.trainer.train_step(states, actions, rewards, next_states, is_game_over_statues)
+        states, actions, rewards, next_states, is_game_over_statuses = zip(*sample)
+        self.trainer.train_step(states, actions, rewards, next_states, is_game_over_statuses)
 
     def train_short_memory(self, state, action, reward, next_state, is_game_over):
         self.trainer.train_step(state, action, reward, next_state, is_game_over)
 
     def get_action(self, state):
-        # random moves: tradeoff of exploration / exploitation
+        # tradeoff of exploration / exploitation
         self.epsilon = 80 - self.n_episodes
 
         one_hot_move = [0,0,0]

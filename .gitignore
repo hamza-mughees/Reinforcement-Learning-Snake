@@ -1,4 +1,5 @@
 snake_game_sample.py
 arial.ttf
 __pycache__
-model
+model.pth
+snake_game.py

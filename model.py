@@ -7,20 +7,18 @@ import numpy as np
 class LinearQNN(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super().__init__()
-        self.linear0 = nn.Linear(input_size, hidden_size)
-        self.linear1 = nn.Linear(hidden_size, output_size)
+        # 0th linear layer
+        self.layer_0 = nn.Linear(input_size, hidden_size)
+        # 1st linear layer
+        self.layer_1 = nn.Linear(hidden_size, output_size)
     
     def forward(self, X):
-        linear0_out = F.relu(self.linear0(X))
-        linear1_out = self.linear1(linear0_out)
-        return linear1_out
+        layer_0_out = F.relu(self.layer_0(X))
+        layer_1_out = self.layer_1(layer_0_out)
+        return layer_1_out
     
     def save(self, file_name='model.pth'):
-        model_dir_path = './model'
-        if not os.path.exists(model_dir_path):
-            os.mkdir(model_dir_path)
-        file_path = os.path.join(model_dir_path, file_name)
-        torch.save(self.state_dict(), file_path)
+        torch.save(self.state_dict(), file_name)
 
 class QTrainer:
     def __init__(self, model, lr, gamma):
